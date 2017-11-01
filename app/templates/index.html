@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macro %}
+
+<!--categories section-->
+{% block content %}
+  <div class="container-fluid">
+    <h1 class="text-center">PITCH PERFECT</h1>
+      <ul>{{ macro.displayCategories(categories) }}</ul>
+  </div>
+{% endblock %}

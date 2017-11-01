@@ -17,5 +17,13 @@ class Categories(db.Model):
 		db.session.add(self)
 		db.session.commit()
 
+	@classmethod
+	def list_categories(cls):
+		'''
+		function that will query the database and to get our list of pitch categories
+		'''
+		categories = Categories.query.all()
+		return categories
+
 	def __repr__(self):
 		return f'User {self.username}'
