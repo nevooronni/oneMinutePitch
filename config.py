@@ -4,9 +4,10 @@ class Config:
 	'''
 	parent configuration class
 	'''
-	SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://nevo:toel@localhost/pitch'
+	SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://nevo:speeds01@localhost/pitch'
 
-class ProductConfig(Config):
+
+class ProdConfig(Config):
 	'''
 	production configuration child class
 	'''
@@ -21,6 +22,6 @@ class DevConfig(Config):
 
 config_options = {
 	'development':DevConfig,
-	'production':ProductConfig
+	'production':ProdConfig
 }
 
