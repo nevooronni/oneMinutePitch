@@ -9,12 +9,12 @@ app = create_app('development')
 manager = Manager(app)
 manager.add_command('server',Server)
 
-#migrate = Migrate(app,db)
-#manager.add_command('db',MigrateCommand)
+migrate = Migrate(app,db)#initializes migrate class and passes in app and db instance
+manager.add_command('db',MigrateCommand)
 
 @manager.shell
 def make_shell_context():
-	return dict(app = app,db = db,Categories = Categories)
+	return dict(app = app, db = db, Categories = Categories)
 
 if __name__ == '__main__':
 	manager.run()
