@@ -25,5 +25,25 @@ class Categories(db.Model):
 		categories = Categories.query.all()
 		return categories
 
+class User(db.Model):
+	'''
+	class that identifiers a user
+	'''
+	__tablename__ = 'users'
+	id = db.Column(db.Integer,primary_key = True)
+	username = db.Column(db.String(255))
+	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))#foreign key column definig the one to many relationship
 	def __repr__(self):
 		return f'User {self.username}'
+
+class Role(db.Model):
+	'''
+	class that assigns a role e.g admin or user to a person using the application
+	'''
+	__tablename__ = 'roles'
+	id = db.Column(db.Integer,primary_key = True)
+	name = db.Column(db.String(255))
+	users = db.relationship('User',backref = 'role',lazy="dynamic")#virtual column that connects with our foreign key backref to access User class and get their tole lazy is how sqlalchemy loads our projects
+
+	def __repr__(self):
+		return f'User {self.name}'
