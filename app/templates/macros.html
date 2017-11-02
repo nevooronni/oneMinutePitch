@@ -7,3 +7,17 @@
     </div>
   {% endfor %}
 {% endmacro %}
+
+<!--display pitches -->
+{% macro displayPitches(pitch_list) %}
+  {% for pitches in pitch_list %}
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <ul>
+        <li>
+          <h3>{{pitches.date}}</h3>
+          <h3>{{pitches.lines|truncate(80)}}</h3>
+        </li>
+      </ul>
+    </div>
+  {% endfor %}
+{% endmacro %}

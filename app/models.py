@@ -1,4 +1,6 @@
 from . import db
+from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
 
 class Categories(db.Model):
 	'''
@@ -33,6 +35,19 @@ class User(db.Model):
 	id = db.Column(db.Integer,primary_key = True)
 	username = db.Column(db.String(255))
 	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))#foreign key column definig the one to many relationship
+	pass_secure = db.Column(db.String(255))
+
+	@property
+	def password(self):#blocks access to the password property not users to have access to that property
+		raise AttributeError('You cannot read the password')
+
+	@password.setter
+	def password(self,password):
+		self.pass_secure = generate_password_hash(password)
+
+	def verify_password(self,password):
+		return check_password_hash(self.pass_secure,password)	
+
 	def __repr__(self):
 		return f'User {self.username}'
 
@@ -47,3 +62,30 @@ class Role(db.Model):
 
 	def __repr__(self):
 		return f'User {self.name}'
+
+#class PitchList(db.Model):
+	#'''
+	#class that list of the pitches for a specific category
+	#'''
+	#pitch_list = []
+
+	#__tablename__ = 'pitches'
+
+	#id = db.Column(db.Integer,primary_key = True)
+	#user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+	#category_id = db.Column(db.Integer,db.ForeignKey('categories.id'))
+	#lines = db.Column(db.Integer,primary_key = True)
+	#date = db.Column(db.DateTime,default=datetime.now)
+
+	#def add_pitches(self):
+		#'''
+		#add pitches to db
+		#'''
+		#db.session.add(self)
+		#db.session.commit()
+
+	#@classmethod
+	#def list_pitches(cls,id):
+		#pitches = PitchList.query.order_by(PitchList.date_posted.desc()).filter_by(cateory_id=id).all()
+		#return pitches
+
