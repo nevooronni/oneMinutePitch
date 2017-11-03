@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% import 'macros.hmtl as macro' %}
+{% import 'macros.html' as macro %}
 <!--content-->
 {% block content %}
   <h3 class="text-center">All pitches for this category</h3>
+  <p class="text-center"><a class="btn btn-success text-center text-danger" href="/category/pitch/new/{{specific_category.id}}">NEW PITCH</a></p>
   {% if pitches %}
     {{ macro.displayPitches() }}
   {% else %}
-    <h4 class="text">No pitches posted here yet</h4>
+    <h4 class="text-center text-danger">NO PITCHES POSTED HERE YET!</h4>
   {% endif %}
 {% endblock %}
