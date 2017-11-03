@@ -1,6 +1,12 @@
 from . import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
+from flask_login import UserMixin#configures our user model to work with the flask-login extension
+from . import login_manager
+
+@login_manager.user_loader
+def load_user(user_id):
+	return User.query.get(int(user_id))#queries db and gets a user with the id.
 
 class Categories(db.Model):
 	'''
@@ -27,13 +33,14 @@ class Categories(db.Model):
 		categories = Categories.query.all()
 		return categories
 
-class User(db.Model):
+class User(UserMixin,db.Model):
 	'''
 	class that identifiers a user
 	'''
 	__tablename__ = 'users'
 	id = db.Column(db.Integer,primary_key = True)
 	username = db.Column(db.String(255))
+	email = db.Column(db.String(255),unique = True,index = True)
 	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))#foreign key column definig the one to many relationship
 	pass_secure = db.Column(db.String(255))
 
