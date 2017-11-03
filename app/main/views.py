@@ -2,7 +2,7 @@ from flask import render_template,redirect,url_for,abort
 from . import main
 from ..models import Categories,User,PitchList#ineter python relative import system
 from .. import db#external python import system
-from flask_login import login_required#intercept a request and check is user is authenticated
+from flask_login import login_required,current_user#intercept a request and check is user is authenticated
 from .forms import NewPitchForm
 
 @main.route('/')
@@ -30,25 +30,26 @@ def category(id):
 
 	return render_template('categories.html',title = title,specific_category = category,pitches = pitches,pitch_form = form)
 
-@main.route('/category/pitch/new/<int:id>',methods = ["GET","POST"])
+@main.route('/category/pitch/new/<int:id>', methods = ['GET','POST'])
 def new_pitch(id):
-	specific_category = Categories.query.filter_by(id=id).first()
+		'''
+		route for a displaying a new pitch form
+		'''
+		form = NewPitchForm()
+		category = Category.query.filter_by(id=id).first()
 
-	if specific_category is None:
-		abort(404)
+		if category is None:
+			abort(404)
 
-	form = NewPitchForm()
+		if form.validate_on_submit():
+			lines = form.lines.data
+			# user = current_user._get_current_object()
+			new_pitch = Peptalk(lines=lines,user_id=current_user.id,category_id=category.id)
+			new_pitch.save_pitch()
+			return redirect(url_for('.category', id = category.id))
 
-	if form.validate_on_submit():
-		lines = form.lines.data
-		new_pitch = NewPitchForm(lines = lines,category_id = category.id,user_id = current_user.id)
-
-		new_pitch.add_pitches()
-
-		return  redirect(url_for('.category', id=category.id))
-
-	title = "NEW PITCH"
-	return render_template('categories.html', pitch_form = form, title = title, specific_category = category)
+		title = 'NEW PITCH'
+		return render_template('new_pitch.html',title = title,pitch_form = form)
 #@main.route('/category/pitch/new/<int:id>',methods = ["GET","POST"])
 #def new_pitch(id):
 	#'''
