@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% import 'macros.html' as macro %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 <!--content-->
 {% block content %}
   <h3 class="text-center">All pitches for this category</h3>
-  <p class="text-center"><a class="btn btn-success text-center text-danger" href="/category/pitch/new/{{specific_category.id}}">NEW PITCH</a></p>
-  {% if pitches %}
-    {{ macro.displayPitches() }}
+  <p class="text-center"><a href="/category/pitch/new/{{specific_category.id}}" class="btn btn-success text-center text-danger">NEW PITCH</a></p>
+  {% if pitch %}
+    {{ macro.displayPitches(pitch) }}
   {% else %}
     <h4 class="text-center text-danger">NO PITCHES POSTED HERE YET!</h4>
   {% endif %}

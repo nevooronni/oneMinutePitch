@@ -63,29 +63,34 @@ class Role(db.Model):
 	def __repr__(self):
 		return f'User {self.name}'
 
-#class PitchList(db.Model):
-	#'''
-	#class that list of the pitches for a specific category
-	#'''
-	#pitch_list = []
+class PitchList(db.Model):
+	'''
+	class that list of the pitches for a specific category
+	'''
+	pitch_list = []
 
-	#__tablename__ = 'pitches'
+	__tablename__ = 'pitches'
 
-	#id = db.Column(db.Integer,primary_key = True)
-	#user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-	#category_id = db.Column(db.Integer,db.ForeignKey('categories.id'))
-	#lines = db.Column(db.Integer,primary_key = True)
-	#date = db.Column(db.DateTime,default=datetime.now)
+	id = db.Column(db.Integer,primary_key = True)
+	user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+	category_id = db.Column(db.Integer,db.ForeignKey('categories.id'))
+	lines = db.Column(db.Integer,primary_key = True)
+	date = db.Column(db.DateTime,default=datetime.now)
 
-	#def add_pitches(self):
-		#'''
-		#add pitches to db
-		#'''
-		#db.session.add(self)
-		#db.session.commit()
+	def add_pitches(self):
+		'''
+		add pitches to db
+		'''
+		db.session.add(self)
+		db.session.commit()
 
-	#@classmethod
-	#def list_pitches(cls,id):
-		#pitches = PitchList.query.order_by(PitchList.date_posted.desc()).filter_by(cateory_id=id).all()
-		#return pitches
+	@classmethod
+	def list_pitch(cls,id):
+		pitches = PitchList.query.order_by(PitchList.date.desc()).filter_by(category_id=id)
+		return pitches
+
+	@classmethod
+	def list_all_pitches(cls):
+		all_pitches = PitchList.query.all()
+		return all_pitches
 
