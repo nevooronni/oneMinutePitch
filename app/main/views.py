@@ -38,17 +38,17 @@ def new_pitch(id):
 		route for a displaying a new pitch form
 		'''
 		form = NewPitchForm()
-		category = Categories.query.filter_by(id=id).first()
+		specific_category = Categories.query.filter_by(id=id).first()
 
-		if category is None:
+		if specific_category is None:
 			abort(404)
 
 		if form.validate_on_submit():
 			lines = form.lines.data
-			# user = current_user._get_current_object()
-			new_pitch = Peptalk(lines=lines,user_id=current_user.id,category_id=category.id)
-			new_pitch.save_pitch()
-			return redirect(url_for('.category', id = category.id))
+			#user = current_user._get_current_object()
+			new_pitch = PitchList(lines=lines,user_id=current_user.id,category_id=specific_category.id)
+			new_pitch.add_pitches()
+			return redirect(url_for('.category', id = specific_category.id))
 
 		title = 'NEW PITCH'
 		return render_template('new_pitch.html',title = title,pitch_form = form)
