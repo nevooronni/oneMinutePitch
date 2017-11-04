@@ -20,16 +20,16 @@ def category(id):
 	'''
 	This route witll return the list of pitches for that particular category
 	'''
-	specific_category = Categories.query.get(id)
+	category = Categories.query.get(id)
 
-	if specific_category is None:
+	if category is None:
 		abort(404)
 
-	pitches = PitchList.list_pitch(id)
-	form = NewPitchForm()
+	pitches = PitchList.list_all_pitches(id)
+	#form = NewPitchForm()
 	title = "PITCHES"
 
-	return render_template('categories.html',title = title,specific_category = category,pitches = pitches,pitch_form = form)
+	return render_template('categories.html',title = title,category = category,pitches = pitches)
 
 @main.route('/category/pitch/new/<int:id>', methods = ['GET','POST'])
 @login_required#intercepts request to see if user is authenticated
@@ -38,31 +38,31 @@ def new_pitch(id):
 		route for a displaying a new pitch form
 		'''
 		form = NewPitchForm()
-		specific_category = Categories.query.filter_by(id=id).first()
+		category = Categories.query.filter_by(id=id).first()
 
-		if specific_category is None:
+		if category is None:
 			abort(404)
 
 		if form.validate_on_submit():
 			lines = form.lines.data
-			#user = current_user._get_current_object()
-			new_pitch = PitchList(lines=lines,user_id=current_user.id,category_id=specific_category.id)
+			new_pitch = PitchList(lines=lines,user_id=current_user.id,category_id=category.id)
 			new_pitch.add_pitches()
-			return redirect(url_for('.category', id = specific_category.id))
+			return redirect(url_for('.category', id = category.id))
 
 		title = 'NEW PITCH'
 		return render_template('new_pitch.html',title = title,pitch_form = form)
+
 #@main.route('/category/pitch/new/<int:id>',methods = ["GET","POST"])
+#@login_required
 #def new_pitch(id):
 	#'''
 	#route for a displaying a new pitch form
 	#'''
+	#form = NewPitchForm()#
 	#specific_category = Categories.query.filter_by(id=id).first()#get specific category
 
 	#if specific_category in None:
 		#abort(404)
-
-	#form = NewPitchForm()#
 
 	#if form.validate_on_submit():
 		#lines = form.lines.data
@@ -74,6 +74,8 @@ def new_pitch(id):
 
 	#title = 'NEW PITCH'
 	#return render_template('new_pitch.html',title = title, pitch_form = form)
+
+
 @main.route('/pitch/<int:id>',methods = ['GET','POST'])
 @login_required
 def specific_pitch(id):
@@ -81,10 +83,10 @@ def specific_pitch(id):
 	returns specific pitch where comments can be viewed and added
 	'''
 
-	pitch = PitchList.query.get(id)
+	pitches = PitchList.query.get(id)
 
-	if pitch is None:
+	if pitches is None:
 		abort(404)
 
 	title = 'COMMENTS'
-	return render_template('pitch.html',title = title,pitch = pitch)
+	return render_template('pitch.html',title = title,pitches = pitches)

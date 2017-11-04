@@ -82,7 +82,7 @@ class PitchList(db.Model):
 	id = db.Column(db.Integer,primary_key = True)
 	user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
 	category_id = db.Column(db.Integer,db.ForeignKey('categories.id'))
-	lines = db.Column(db.Integer,primary_key = True)
+	lines = db.Column(db.String(255))
 	date = db.Column(db.DateTime,default=datetime.now)
 
 	def add_pitches(self):
@@ -93,12 +93,12 @@ class PitchList(db.Model):
 		db.session.commit()
 
 	@classmethod
-	def list_pitch(cls,id):
-		pitches = PitchList.query.order_by(PitchList.date.desc()).filter_by(category_id=id)
+	def list_all_pitches(cls,id):
+		pitches = PitchList.query.order_by(PitchList.date.desc()).filter_by(category_id=id).all()
 		return pitches
 
-	@classmethod
-	def list_all_pitches(cls):
-		all_pitches = PitchList.query.all()
-		return all_pitches
+	#@classmethod
+	#def list_all_pitches(cls):
+		#all_pitches = PitchList.query.all()
+		#return all_pitches
 
