@@ -13,14 +13,14 @@
       <ul class="nav navbar-nav">
       <li><a href="/">Home</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <span class="nav navbar-nav navbar-right">
         {% if current_user.is_authenticated %}
-        <li>{{ current_user.username }}</li>
-        <li><a href="{{url_for('auth.logout')}}">SIGN OUT</a></li>
+        <h4 class="text-right text-danger">{{ current_user.username }}</h4>
+        <h4><a href="{{url_for('auth.logout')}}">SIGN OUT</a></h4>
         {% else %}
-        <li><a href="{{url_for('auth.login')}}">LOGIN</a></li>
+        <h4><a href="{{url_for('auth.login')}}">LOGIN</a></h4>
         {% endif %}
-      </ul>
+      </span>
     </div>
   </div>
 </div>

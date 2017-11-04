@@ -2,7 +2,7 @@ from flask_login import login_required,current_user#intercept a request and chec
 from .forms import NewPitchForm
 from flask import render_template,redirect,url_for,abort
 from . import main
-from ..models import Categories,User,PitchList#ineter python relative import system
+from ..models import Categories,User,PitchList,Comment#ineter python relative import system
 from .. import db#external python import system
 
 
@@ -88,5 +88,27 @@ def specific_pitch(id):
 	if pitches is None:
 		abort(404)
 
+	comment = Comment.list_comments(id)
 	title = 'COMMENTS'
-	return render_template('pitch.html',title = title,pitches = pitches)
+	return render_template('pitch.html',title = title,pitches = pitches,comment = comment)
+
+@main.route('/pitch/new/<int:id>',methods = ['GET','POST'])
+@login_required
+def comment(id):
+	'''
+	return a list of comments for a specific pitch
+	'''
+	form = CommentForm()
+	pitches = PitchList.query.filter_by(id=id).first()
+
+	if pitches is None:
+		abort(404)
+
+	if form.validate_on_submit():
+		comment = form.comment.data
+		new_comment = Comment(comment=comment,user_id=current_usr.id,pitches_id=pitches.id)
+		new_comment.save_comment()
+		return redirect(url_for('.category', id = pitches.id))
+
+	title = "NEW COMMENT"
+	return render_template('comment.html',title = title,comment_form = form)

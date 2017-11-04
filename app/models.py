@@ -84,6 +84,7 @@ class PitchList(db.Model):
 	category_id = db.Column(db.Integer,db.ForeignKey('categories.id'))
 	lines = db.Column(db.String(255))
 	date = db.Column(db.DateTime,default=datetime.now)
+	comments = db.relationship('Comment',backref = 'pitchlist',lazy = 'dynamic')
 
 	def add_pitches(self):
 		'''
@@ -101,4 +102,28 @@ class PitchList(db.Model):
 	#def list_all_pitches(cls):
 		#all_pitches = PitchList.query.all()
 		#return all_pitches
+
+class Comment(db.Model):
+	'''
+	class that create comment for our pitches
+	'''
+	__tablename__ = 'comments'
+
+	id = db.Column(db.Integer,primary_key = True)
+	user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+	pitches_id = db.Column(db.Integer,db.ForeignKey('pitches.id'))
+	commnet = db.Column(db.String(255))
+	date = db.Column(db.DateTime,default=datetime.utcnow)
+	
+	def save_comment(self):
+		'''
+		save the comments for a specific pitch
+		'''
+		db.session.add(self)
+		db.session.commit()
+
+	@classmethod
+	def list_comments(self,id):
+		comment = Comment.query.order_by(Comment.date.desc()).filter_by(pitches_id=id).all()
+		return comment
 

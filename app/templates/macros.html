@@ -13,15 +13,17 @@
   {% for pitches in pitch_list %}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <h3><a href="/pitch/{{pitches.id}}"></h3>
+      <h4 class="text-danger">{{pitches.date.strftime('%Y/%m/%d %r')}}</h4>
       <h3>{{pitches.lines|truncate(80)}}</h3>
     </div>
   {% endfor %}
 {% endmacro %}
 
 <!--display one pitch-->
-{% macro displayOnepitch(specific_pitch_list) %}
-  {% for comment in specific_pitch_list %}
-    <div>
+{% macro displayOnepitch(one_pitch_list) %}
+  {% for comment in one_pitch_list %}
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-left">
+      {{comment.comment}}
     </div>
   {% endfor %}
 {% endmacro %}
