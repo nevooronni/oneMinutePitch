@@ -4,7 +4,7 @@ from flask import render_template,redirect,url_for,abort
 from . import main
 from ..models import Categories,User,PitchList,Comment#ineter python relative import system
 from .. import db#external python import system
-
+from datetime import datetime
 
 @main.route('/')
 def index():
@@ -112,3 +112,25 @@ def comment(id):
 
 	title = "NEW COMMENT"
 	return render_template('comment.html',title = title,comment_form = form)
+
+
+#@main.route('/pitch/new/<int:id>',methods = ["GET","POST"])
+#@login_required
+#def comment(id):
+	#form = CommentForm()
+	#pitches = PitchList.query.filter_by(id=id).first()
+	
+	#if pitches is None:
+		#abort(404) 
+
+	#if form.validate_on_submit():
+		#comment = form.comment.data
+		#new_comment = Comment(comment = comment,user_id = current_user.id,pitches_id = pitches.id,)
+		#new_comment.save_comment()
+
+		#return redirect(url_for('.pitch', id=pitches.id))
+
+	#title = 'NEW COMMENT'
+	#return render_template('comment.html',comment_form = form,title = title)
+
+
