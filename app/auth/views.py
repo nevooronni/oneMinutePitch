@@ -9,10 +9,10 @@ from . import auth
 def register():
 	form = RegistrationForm()#created a form instance to pass to our template 
 	if form.validate_on_submit():
-		user = User(email = form.email.data, username = form.username.data, password = form.password.data)
-		db.session.add(User)
+		user = User(email = form.email.data,username = form.username.data,password = form.password.data)
+		db.session.add(user)
 		db.session.commit()
-		return redirect(url_for('auth.lgoin'))#redirects to login page
+		return redirect(url_for('auth.login'))#redirects to login page
 		title = 'NEW ACCOUNT'
 	return render_template('auth/register.html',registration_form = form)
 

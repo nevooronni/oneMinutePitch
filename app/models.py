@@ -43,6 +43,7 @@ class User(UserMixin,db.Model):
 	email = db.Column(db.String(255),unique = True,index = True)
 	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))#foreign key column definig the one to many relationship
 	pass_secure = db.Column(db.String(255))
+	password_hash = db.Column(db.String(255))
 
 	@property
 	def password(self):#blocks access to the password property not users to have access to that property
