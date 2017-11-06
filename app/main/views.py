@@ -108,7 +108,7 @@ def new_comment(id):
 		comment = form.comment.data
 		new_comment = Comment(comment = comment,user_id = current_user.id,pitches_id = pitch.id)
 		new_comment.save_comment()
-		return redirect(url_for('.category', id = pitch.id))
+		return redirect(url_for('.specific_pitch', id = pitch.id))
 
 	title = 'New Comment'
 	return render_template('comment.html', title = title,comment_form = form)
