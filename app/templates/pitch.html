@@ -3,14 +3,13 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <h3><strong>{{pitches.lines}}</strong></h3>
+      <h3><strong>{{pitch.lines}}</strong></h3>
       <h4>COMMENTS</h4>
       {% if comment %}
         {{ macro.displayOnePitch(comment)}}
       {% else %}
         <h4 class='text-danger'>NO COMMENTS</h4>
-        <a class="btn btn-success" href="/pitch/
-        new/{{pitches.id}}">ADD COMMENT</a>
+        <a class="btn btn-success" href="/pitch/new/{{pitch.id}}">ADD COMMENT</a>
       {% endif %}
     </div>
   </div>

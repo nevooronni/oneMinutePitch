@@ -1,5 +1,5 @@
 from flask_login import login_required,current_user#intercept a request and check is user is authenticated
-from .forms import NewPitchForm
+from .forms import NewPitchForm,CommentForm
 from flask import render_template,redirect,url_for,abort
 from . import main
 from ..models import Categories,User,PitchList,Comment#ineter python relative import system
@@ -26,7 +26,7 @@ def category(id):
 		abort(404)
 
 	pitches = PitchList.list_all_pitches(id)
-	#form = NewPitchForm()
+	form = NewPitchForm()
 	title = "PITCHES"
 
 	return render_template('categories.html',title = title,category = category,pitches = pitches)
@@ -83,54 +83,32 @@ def specific_pitch(id):
 	returns specific pitch where comments can be viewed and added
 	'''
 
-	pitches = PitchList.query.get(id)
+	pitch = PitchList.query.get(id)
 
-	if pitches is None:
+	if pitch is None:
 		abort(404)
 
 	comment = Comment.list_comments(id)
 	title = 'COMMENTS'
-	return render_template('pitch.html',title = title,pitches = pitches,comment = comment)
+	return render_template('pitch.html',title = title,pitch = pitch,comment = comment)
 
 @main.route('/pitch/new/<int:id>',methods = ['GET','POST'])
 @login_required
-def comment(id):
+def new_comment(id):
 	'''
-	return a list of comments for a specific pitch
+	returns comments for a specific pitch
 	'''
 	form = CommentForm()
-	pitches = PitchList.query.filter_by(id=id).first()
+	pitch = PitchList.query.filter_by(id=id).first()
 
-	if pitches is None:
+	if pitch is None:
 		abort(404)
 
 	if form.validate_on_submit():
 		comment = form.comment.data
-		new_comment = Comment(comment=comment,user_id=current_usr.id,pitches_id=pitches.id)
+		new_comment = Comment(comment = comment,user_id = current_user.id,pitches_id = pitch.id)
 		new_comment.save_comment()
-		return redirect(url_for('.category', id = pitches.id))
+		return redirect(url_for('.category', id = pitch.id))
 
-	title = "NEW COMMENT"
-	return render_template('comment.html',title = title,comment_form = form)
-
-
-#@main.route('/pitch/new/<int:id>',methods = ["GET","POST"])
-#@login_required
-#def comment(id):
-	#form = CommentForm()
-	#pitches = PitchList.query.filter_by(id=id).first()
-	
-	#if pitches is None:
-		#abort(404) 
-
-	#if form.validate_on_submit():
-		#comment = form.comment.data
-		#new_comment = Comment(comment = comment,user_id = current_user.id,pitches_id = pitches.id,)
-		#new_comment.save_comment()
-
-		#return redirect(url_for('.pitch', id=pitches.id))
-
-	#title = 'NEW COMMENT'
-	#return render_template('comment.html',comment_form = form,title = title)
-
-
+	title = 'New Comment'
+	return render_template('comment.html', title = title,comment_form = form)
